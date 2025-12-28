@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FadeIn, ScaleIn } from '../components/Animations';
+import useAuthStore from '../store/authStore';
 
 const HistoryPage = () => {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { token } = useAuthStore(); // Get token from store
 
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/history');
+                const config = {};
+                if (token) {
+                    config.headers = { Authorization: `Bearer ${token}` };
+                }
+                const res = await axios.get('http://localhost:5000/api/history', config);
                 setHistory(res.data);
             } catch (err) {
                 console.error(err);
@@ -18,7 +24,7 @@ const HistoryPage = () => {
             }
         };
         fetchHistory();
-    }, []);
+    }, [token]);
 
     return (
         <FadeIn className="container h-full flex flex-col gap-8">

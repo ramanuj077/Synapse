@@ -73,21 +73,53 @@ const RefactorResult = ({ data, onApply }) => {
     return (
         <div className="flex flex-col gap-4 h-full" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 140px)', paddingRight: '4px' }}>
 
-            {/* Code Smell Alert */}
+
+            {/* Enhanced Code Smell Alert - Demo Ready */}
             {data.smell_detected && (
                 <div className="animate-fade-in" style={{
-                    background: 'rgba(239, 68, 68, 0.1)',
-                    border: '1px solid rgba(239, 68, 68, 0.2)',
-                    borderRadius: '12px',
-                    padding: '1rem',
+                    background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.05))',
+                    border: '2px solid rgba(239, 68, 68, 0.3)',
+                    borderRadius: '16px',
+                    padding: '1.5rem',
                     display: 'flex',
+                    flexDirection: 'column',
                     gap: '1rem',
-                    alignItems: 'start'
+                    boxShadow: '0 4px 20px rgba(239, 68, 68, 0.15)'
                 }}>
-                    <div style={{ color: 'var(--error)' }}>⚠️</div>
-                    <div>
-                        <h4 style={{ color: 'var(--error)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Detected Anti-Pattern</h4>
-                        <p style={{ margin: 0, fontSize: '0.9rem', color: '#FECACA' }}>{data.smell_detected}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{
+                            fontSize: '2.5rem',
+                            filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.5))'
+                        }}>🚨</div>
+                        <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                                <h3 style={{
+                                    color: '#fca5a5',
+                                    fontSize: '1.1rem',
+                                    margin: 0,
+                                    fontWeight: 700,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.5px'
+                                }}>Code Smell Detected</h3>
+                                <div style={{
+                                    background: 'rgba(239, 68, 68, 0.2)',
+                                    color: '#fca5a5',
+                                    padding: '0.25rem 0.75rem',
+                                    borderRadius: '12px',
+                                    fontSize: '0.7rem',
+                                    fontWeight: 600,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '1px'
+                                }}>High Priority</div>
+                            </div>
+                            <p style={{
+                                margin: 0,
+                                fontSize: '1rem',
+                                color: '#fef2f2',
+                                fontWeight: 500,
+                                lineHeight: '1.6'
+                            }}>{data.smell_detected}</p>
+                        </div>
                     </div>
                 </div>
             )}
@@ -138,10 +170,40 @@ const RefactorResult = ({ data, onApply }) => {
             {/* NEW: Engineering Metrics HUD */}
             <MetricsCard metrics={data.metrics} />
 
-            {/* Explanation */}
-            <div className="card animate-slide-up">
-                <h4 style={{ color: 'var(--secondary)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Insight</h4>
-                <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-main)' }}>
+            {/* Enhanced Explanation - Judge Ready */}
+            <div className="card animate-slide-up" style={{
+                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(16, 185, 129, 0.05))',
+                border: '1px solid rgba(99, 102, 241, 0.2)',
+                padding: '1.5rem',
+                borderRadius: '16px'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                    <div style={{
+                        background: 'rgba(99, 102, 241, 0.15)',
+                        padding: '0.5rem',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <span style={{ fontSize: '1.25rem' }}>💡</span>
+                    </div>
+                    <h4 style={{
+                        color: '#a5b4fc',
+                        margin: 0,
+                        fontSize: '0.9rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px',
+                        fontWeight: 700
+                    }}>AI Insight & Analysis</h4>
+                </div>
+                <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    color: 'var(--text-main)',
+                    lineHeight: '1.8',
+                    fontWeight: 400
+                }}>
                     {data.explanation}
                 </p>
             </div>
@@ -160,49 +222,85 @@ const RefactorResult = ({ data, onApply }) => {
                         <button
                             onClick={() => setViewMode('code')}
                             style={{
-                                background: 'none',
+                                background: viewMode === 'code' ? 'rgba(99, 102, 241, 0.15)' : 'none',
                                 border: 'none',
-                                color: viewMode === 'code' ? 'var(--accent)' : 'var(--text-muted)',
-                                fontWeight: viewMode === 'code' ? 600 : 400,
+                                color: viewMode === 'code' ? '#a5b4fc' : 'var(--text-muted)',
+                                fontWeight: viewMode === 'code' ? 700 : 400,
                                 cursor: 'pointer',
-                                padding: 0
+                                padding: '0.5rem 1rem',
+                                borderRadius: '8px',
+                                transition: 'all 0.2s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                fontSize: '0.85rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
                             }}
                         >
-                            Result
+                            <span>✨</span> Final Result
                         </button>
                         <button
                             onClick={() => setViewMode('diff')}
                             style={{
-                                background: 'none',
+                                background: viewMode === 'diff' ? 'rgba(16, 185, 129, 0.15)' : 'none',
                                 border: 'none',
-                                color: viewMode === 'diff' ? 'var(--accent)' : 'var(--text-muted)',
-                                fontWeight: viewMode === 'diff' ? 600 : 400,
+                                color: viewMode === 'diff' ? '#6ee7b7' : 'var(--text-muted)',
+                                fontWeight: viewMode === 'diff' ? 700 : 400,
                                 cursor: 'pointer',
-                                padding: 0
+                                padding: '0.5rem 1rem',
+                                borderRadius: '8px',
+                                transition: 'all 0.2s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                fontSize: '0.85rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
                             }}
                         >
-                            Diff
+                            <span>🔄</span> Before/After Diff
                         </button>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <button
                             className="btn-secondary"
-                            onClick={() => navigator.clipboard.writeText(data.refactored_code)}
-                            style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem' }}
+                            onClick={() => {
+                                navigator.clipboard.writeText(data.refactored_code);
+                                // Optional: Add toast notification
+                            }}
+                            style={{
+                                padding: '0.5rem 1.25rem',
+                                fontSize: '0.85rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                borderRadius: '8px',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                transition: 'all 0.2s'
+                            }}
                         >
-                            Copy
+                            <span>📋</span> Copy Code
                         </button>
                         <button
                             className="btn"
                             onClick={() => onApply && onApply(data.refactored_code)}
                             style={{
-                                padding: '0.2rem 0.8rem',
-                                fontSize: '0.75rem',
-                                background: 'var(--accent)',
-                                boxShadow: '0 2px 10px var(--accent-glow)'
+                                padding: '0.5rem 1.5rem',
+                                fontSize: '0.85rem',
+                                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                                boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                borderRadius: '8px',
+                                border: 'none',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
                             }}
                         >
-                            Apply Fix
+                            <span>✅</span> Apply Fix
                         </button>
                     </div>
                 </div>
