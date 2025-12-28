@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 
 const SettingsModal = ({ isOpen, onClose, preferences, onSave }) => {
+    // Hooks must be unconditional
     const [localPrefs, setLocalPrefs] = useState(preferences);
 
-    // Sync state when preferences prop changes
     useEffect(() => {
         setLocalPrefs(preferences);
     }, [preferences]);
@@ -32,26 +32,6 @@ const SettingsModal = ({ isOpen, onClose, preferences, onSave }) => {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <label className="flex items-center justify-between">
-                        <span style={{ color: 'var(--text-muted)' }}>Use TypeScript</span>
-                        <input
-                            type="checkbox"
-                            checked={localPrefs.useTypescript}
-                            onChange={(e) => handleChange('useTypescript', e.target.checked)}
-                            style={{ accentColor: 'var(--primary)' }}
-                        />
-                    </label>
-
-                    <label className="flex items-center justify-between">
-                        <span style={{ color: 'var(--text-muted)' }}>Prefer Arrow Functions</span>
-                        <input
-                            type="checkbox"
-                            checked={localPrefs.arrowFunctions}
-                            onChange={(e) => handleChange('arrowFunctions', e.target.checked)}
-                            style={{ accentColor: 'var(--primary)' }}
-                        />
-                    </label>
-
                     <div className="flex flex-col gap-2">
                         <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Custom Style Guidelines</span>
                         <textarea

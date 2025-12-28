@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism-tomorrow.css';
+import { Editor } from '@monaco-editor/react';
 import DiffResult from './DiffResult';
 import { ScaleIn } from './Animations';
 
@@ -72,14 +70,6 @@ const RefactorResult = ({ data, onApply }) => {
         </div>
     );
 
-    const highlightedCode = (() => {
-        try {
-            return Prism.highlight(data.refactored_code || '', Prism.languages.javascript, 'javascript');
-        } catch (e) {
-            return data.refactored_code;
-        }
-    })();
-
     return (
         <div className="flex flex-col gap-4 h-full" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 140px)', paddingRight: '4px' }}>
 
@@ -102,6 +92,49 @@ const RefactorResult = ({ data, onApply }) => {
                 </div>
             )}
 
+            {/* Safety Gate Warning (Synapse 2.1) */}
+            {data.safety_status === 'syntax_warning' && (
+                <div className="animate-fade-in" style={{
+                    background: 'rgba(245, 158, 11, 0.1)',
+                    border: '1px solid rgba(245, 158, 11, 0.2)',
+                    borderRadius: '12px',
+                    padding: '1rem',
+                    display: 'flex',
+                    gap: '1rem',
+                    alignItems: 'start'
+                }}>
+                    <div style={{ color: '#F59E0B' }}>🛡️</div>
+                    <div>
+                        <h4 style={{ color: '#F59E0B', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Synapse 3.0 Warning</h4>
+                        <p style={{ margin: 0, fontSize: '0.9rem', color: '#FCD34D' }}>
+                            Self-healing failed after multiple attempts. The code may contain syntax errors.
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {/* Self-Healing Success Badge (Synapse 3.0) */}
+            {data.metrics?.healing_attempts > 0 && data.safety_status !== 'syntax_warning' && (
+                <div className="animate-fade-in" style={{
+                    background: 'rgba(16, 185, 129, 0.1)',
+                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    borderRadius: '12px',
+                    padding: '0.8rem 1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.8rem',
+                    marginBottom: '1rem'
+                }}>
+                    <span style={{ fontSize: '1.2rem' }}>🚑</span>
+                    <div>
+                        <h4 style={{ color: 'var(--secondary)', fontSize: '0.85rem', margin: 0 }}>Self-Healed Code</h4>
+                        <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                            Synapse detected and fixed a syntax error automatically during generation.
+                        </p>
+                    </div>
+                </div>
+            )}
+
             {/* NEW: Engineering Metrics HUD */}
             <MetricsCard metrics={data.metrics} />
 
@@ -114,7 +147,7 @@ const RefactorResult = ({ data, onApply }) => {
             </div>
 
             {/* Refactored Code */}
-            <div className="card flex-1 flex flex-col animate-slide-up" style={{ padding: 0, overflow: 'hidden', minHeight: '300px', animationDelay: '0.1s' }}>
+            <div className="card flex-1 flex flex-col animate-slide-up" style={{ padding: 0, overflow: 'hidden', minHeight: '400px', animationDelay: '0.1s' }}>
                 <div style={{
                     padding: '0.75rem 1rem',
                     borderBottom: '1px solid var(--border)',
@@ -176,18 +209,27 @@ const RefactorResult = ({ data, onApply }) => {
 
                 <div style={{
                     margin: 0,
-                    padding: '1rem',
+                    padding: '0',
                     background: '#0B0C12',
-                    color: '#f8f8f2',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '14px',
-                    overflow: 'auto',
-                    flex: 1
+                    overflow: 'hidden',
+                    flex: 1,
+                    height: '100%'
                 }}>
                     {viewMode === 'code' ? (
-                        <pre
-                            style={{ margin: 0, fontFamily: 'inherit' }}
-                            dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                        <Editor
+                            height="100%"
+                            defaultLanguage="javascript"
+                            value={data.refactored_code}
+                            theme="vs-dark"
+                            options={{
+                                readOnly: true,
+                                minimap: { enabled: false },
+                                fontSize: 14,
+                                fontFamily: 'JetBrains Mono, monospace',
+                                scrollBeyondLastLine: false,
+                                automaticLayout: true,
+                                padding: { top: 16 }
+                            }}
                         />
                     ) : (
                         <DiffResult original={data.original_code} modified={data.refactored_code} />

@@ -10,8 +10,7 @@ import DocsPage from './pages/DocsPage'
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [preferences, setPreferences] = useState({
-    useTypescript: false,
-    arrowFunctions: true,
+    arrowFunctions: false,
     customInstructions: ''
   })
 

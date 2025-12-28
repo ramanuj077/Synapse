@@ -1,24 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import CodeEditor from '../components/CodeEditor';
 import RefactorResult from '../components/RefactorResult';
 import { FadeIn } from '../components/Animations';
 
 const RefactorPage = ({ preferences }) => {
-    const [inputCode, setInputCode] = useState(`// Paste code here to refactor...
+    const [inputCode, setInputCode] = useState(`// 🚀 Synapse 2.1: Paste code OR a GitHub File URL...
+// Example: https://github.com/facebook/react/blob/main/packages/react/index.js
+
 function calculateTotal(items) {
   var total = 0;
   for (var i = 0; i < items.length; i++) {
     total = total + items[i].price;
   }
-  console.log(total);
   return total;
 }`);
 
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [result, setResult] = useState(null);
+    const [refactorType, setRefactorType] = useState('clean-code');
 
     const handleRefactor = async () => {
+        if (!inputCode || !inputCode.trim()) {
+            alert('Please enter some code to analyze.');
+            return;
+        }
+
         setIsAnalyzing(true);
         setResult(null);
 
@@ -26,7 +33,8 @@ function calculateTotal(items) {
             // Call Backend
             const response = await axios.post('http://localhost:5000/api/analyze', {
                 code: inputCode,
-                preferences
+                preferences,
+                refactorType
             });
             setResult(response.data);
         } catch (error) {
@@ -46,7 +54,7 @@ function calculateTotal(items) {
             <div className="flex justify-between items-center">
                 <div>
                     <h2 style={{ fontSize: '3rem', fontWeight: 700, margin: 0 }}>
-                        <span style={{ background: 'var(--primary-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                        <span style={{ background: 'linear-gradient(to right, #ffffff, #818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                             Workbench
                         </span>
                     </h2>
@@ -54,22 +62,44 @@ function calculateTotal(items) {
                         Enterprise Engineering Analytics
                     </p>
                 </div>
-                <button
-                    className="btn-glow"
-                    onClick={handleRefactor}
-                    disabled={isAnalyzing}
-                    style={{ position: 'relative', overflow: 'hidden' }}
-                >
-                    {isAnalyzing ? (
-                        <>
-                            <span className="spinner">⚡</span> Processing
-                        </>
-                    ) : (
-                        <>
-                            <span style={{ marginRight: '8px' }}>✨</span> Run Optimization
-                        </>
-                    )}
-                </button>
+                <div className="flex gap-4">
+                    <select
+                        value={refactorType}
+                        onChange={(e) => setRefactorType(e.target.value)}
+                        className="btn-secondary"
+                        style={{
+                            background: '#18181b',
+                            color: '#fff',
+                            padding: '0.8rem 1rem',
+                            border: '1px solid var(--border)',
+                            minWidth: '160px',
+                            borderRadius: '8px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <option value="clean-code">✨ Clean Code</option>
+                        <option value="performance">⚡ Performance</option>
+                        <option value="readability">📖 Readability</option>
+                        <option value="security">🛡️ Security</option>
+                    </select>
+
+                    <button
+                        className="btn-glow"
+                        onClick={handleRefactor}
+                        disabled={isAnalyzing}
+                        style={{ position: 'relative', overflow: 'hidden' }}
+                    >
+                        {isAnalyzing ? (
+                            <>
+                                <span className="spinner">⚡</span> Processing
+                            </>
+                        ) : (
+                            <>
+                                <span style={{ marginRight: '8px' }}>✨</span> Run Optimization
+                            </>
+                        )}
+                    </button>
+                </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '2rem', flex: 1, minHeight: 0 }}>
