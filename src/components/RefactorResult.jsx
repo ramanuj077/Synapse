@@ -19,22 +19,31 @@ const MetricsCard = ({ metrics }) => {
                         <span style={{ fontSize: '1.5rem', fontWeight: 600, color: '#34D399' }}>{metrics.complexity_after}</span>
                     </div>
                 </div>
+
+                {/* NEW: Time Complexity & Risk */}
                 <div className="flex flex-col">
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Rating</span>
-                    <span style={{ fontSize: '1.5rem', fontWeight: 600, color: metrics.maintainability_rating === 'A' ? '#34D399' : '#FBBF24' }}>
-                        {metrics.maintainability_rating}
-                    </span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Time Impact</span>
+                    <div className="flex items-center justify-center gap-2">
+                        <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-muted)' }}>{metrics.time_complexity_before || '?'}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>→</span>
+                        <span style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--accent)' }}>{metrics.time_complexity_after || '?'}</span>
+                    </div>
                 </div>
+
                 <div className="flex flex-col">
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Lines Saved</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Risk Score</span>
+                    <div className="flex items-center justify-center gap-1">
+                        <span style={{ fontSize: '1.5rem', fontWeight: 600, color: metrics.risk_score < 20 ? '#34D399' : '#F87171' }}>
+                            {metrics.risk_score}%
+                        </span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>prob.</span>
+                    </div>
+                </div>
+
+                <div className="flex flex-col">
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Code Saved</span>
                     <span style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--accent)' }}>
-                        {metrics.lines_saved}
-                    </span>
-                </div>
-                <div className="flex flex-col">
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Status</span>
-                    <span style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--primary)' }}>
-                        🚀
+                        {metrics.lines_saved} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>lines</span>
                     </span>
                 </div>
             </div>

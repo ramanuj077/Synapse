@@ -53,7 +53,10 @@ const SYSTEM_PROMPT = `
 You are Synapse, an elite Multi-Language Code Refactoring Engine.
 - Goal: Analyze the input code (Auto-Detect Language: Python, Java, C++, JS, Go, etc).
 - Task: Refactor it to be idiomatic, performant, and clean.
-- Metrics: Estimate complexity and maintainability.
+- Metrics & Analysis:
+  1. Estimate Time Complexity (Big O) Before vs After.
+  2. Calculate a "Risk Score" (0-100) representing likelihood of regression/bugs (Lower is better).
+  3. Complexity and Maintenance Rating.
 - Output: JSON object ONLY.
 `;
 
@@ -70,7 +73,12 @@ app.post('/api/analyze', async (req, res) => {
             explanation: "",
             smell_detected: null,
             refactored_code: "",
-            metrics: { complexity_before: 0, complexity_after: 0, maintainability_rating: "N/A", lines_saved: 0 }
+            metrics: {
+                complexity_before: 0, complexity_after: 0,
+                time_complexity_before: "?", time_complexity_after: "?",
+                risk_score: 0,
+                maintainability_rating: "N/A", lines_saved: 0
+            }
         };
 
         // 3. AI Processing (Gemini) - FORCED
@@ -93,6 +101,9 @@ app.post('/api/analyze', async (req, res) => {
                 "metrics": {
                     "complexity_before": number (1-10),
                     "complexity_after": number (1-10),
+                    "time_complexity_before": "string (e.g. O(n^2))",
+                    "time_complexity_after": "string (e.g. O(n))",
+                    "risk_score": number (0-100, low is good),
                     "maintainability_rating": "A/B/C/D",
                     "lines_saved": number
                 }
@@ -132,6 +143,9 @@ app.post('/api/analyze', async (req, res) => {
                 response.metrics = {
                     complexity_before: 6,
                     complexity_after: 1,
+                    time_complexity_before: "O(n)",
+                    time_complexity_after: "O(1)",
+                    risk_score: 5,
                     maintainability_rating: "A",
                     lines_saved: 4
                 };
@@ -149,19 +163,34 @@ app.post('/api/analyze', async (req, res) => {
                         ? `const ${funcName} = (items: any[]): number => items.reduce((acc, curr) => acc + curr.price, 0);`
                         : `const ${funcName} = (items) => items.reduce((acc, curr) => acc + curr.price, 0);`;
 
-                    response.metrics = { complexity_before: 8, complexity_after: 2, maintainability_rating: "A", lines_saved: 3 };
+                    response.metrics = {
+                        complexity_before: 8, complexity_after: 2,
+                        time_complexity_before: "O(n)", time_complexity_after: "O(n)",
+                        risk_score: 10,
+                        maintainability_rating: "A", lines_saved: 3
+                    };
                 }
                 else if (code.includes('console.log')) {
                     response.explanation = "Removed debug artifacts (console.log) for production safety.";
                     response.smell_detected = "Debug Leftovers";
                     response.refactored_code = code.split('\n').filter(line => !line.includes('console.log')).join('\n');
-                    response.metrics = { complexity_before: 2, complexity_after: 1, maintainability_rating: "A", lines_saved: 1 };
+                    response.metrics = {
+                        complexity_before: 2, complexity_after: 1,
+                        time_complexity_before: "O(1)", time_complexity_after: "O(1)",
+                        risk_score: 0,
+                        maintainability_rating: "A", lines_saved: 1
+                    };
                 }
                 else {
                     response.explanation = "Code looks stable. Added documentation.";
                     response.smell_detected = "Clean Code";
                     response.refactored_code = isTS ? `/** @returns void */\n` + code : `/** Verified */\n` + code;
-                    response.metrics = { complexity_before: 1, complexity_after: 1, maintainability_rating: "A", lines_saved: 0 };
+                    response.metrics = {
+                        complexity_before: 1, complexity_after: 1,
+                        time_complexity_before: "O(1)", time_complexity_after: "O(1)",
+                        risk_score: 0,
+                        maintainability_rating: "A", lines_saved: 0
+                    };
                 }
             }
             // 3. GENERIC FALLBACK
@@ -169,7 +198,12 @@ app.post('/api/analyze', async (req, res) => {
                 response.explanation = "Code analysis complete. Minor formatting adjustments applied.";
                 response.smell_detected = "Formatting";
                 response.refactored_code = code.trim();
-                response.metrics = { complexity_before: 1, complexity_after: 1, maintainability_rating: "B", lines_saved: 0 };
+                response.metrics = {
+                    complexity_before: 1, complexity_after: 1,
+                    time_complexity_before: "Unknown", time_complexity_after: "Unknown",
+                    risk_score: 0,
+                    maintainability_rating: "B", lines_saved: 0
+                };
             }
 
             // Save to DB

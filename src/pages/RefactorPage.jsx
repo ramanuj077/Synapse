@@ -42,52 +42,63 @@ function calculateTotal(items) {
     };
 
     return (
-        <FadeIn className="flex flex-col h-full gap-4">
+        <FadeIn className="flex flex-col h-full gap-8">
             <div className="flex justify-between items-center">
                 <div>
-                    <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Refactoring Workspace</h2>
-                    <p className="text-muted">
-                        AI-driven code analysis.
-                        {preferences.useTypescript && <span style={{ marginLeft: '1rem', fontSize: '0.8rem', background: '#3178c6', padding: '2px 8px', borderRadius: '4px', color: 'white' }}>TypeScript Mode</span>}
+                    <h2 style={{ fontSize: '3rem', fontWeight: 700, margin: 0 }}>
+                        <span style={{ background: 'var(--primary-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            Workbench
+                        </span>
+                    </h2>
+                    <p className="text-muted" style={{ letterSpacing: '1px', textTransform: 'uppercase', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+                        Enterprise Engineering Analytics
                     </p>
                 </div>
                 <button
-                    className="btn"
+                    className="btn-glow"
                     onClick={handleRefactor}
-                    style={{
-                        fontSize: '1.1rem',
-                        padding: '0.8rem 2rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        opacity: isAnalyzing ? 0.7 : 1
-                    }}
                     disabled={isAnalyzing}
+                    style={{ position: 'relative', overflow: 'hidden' }}
                 >
                     {isAnalyzing ? (
                         <>
-                            <span className="spinner">⚡</span> Analyzing...
+                            <span className="spinner">⚡</span> Processing
                         </>
                     ) : (
                         <>
-                            <span>✨</span> Optimize Code
+                            <span style={{ marginRight: '8px' }}>✨</span> Run Optimization
                         </>
                     )}
                 </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', flex: 1, minHeight: 0 }}>
-                <div className="h-full">
-                    <CodeEditor code={inputCode} onChange={setInputCode} label="Original Source" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '2rem', flex: 1, minHeight: 0 }}>
+                {/* Editor Side */}
+                <div className="mac-window">
+                    <div className="mac-header">
+                        <div className="flex gap-2">
+                            <div className="mac-dot red"></div>
+                            <div className="mac-dot yellow"></div>
+                            <div className="mac-dot green"></div>
+                        </div>
+                        <div className="mac-title">legacy_module.js</div>
+                    </div>
+                    <div style={{ flex: 1, overflow: 'hidden', padding: '0' }}>
+                        <CodeEditor code={inputCode} onChange={setInputCode} label="" />
+                    </div>
                 </div>
-                <div className="h-full">
-                    <RefactorResult
-                        data={result}
-                        onApply={(newCode) => {
-                            setInputCode(newCode);
-                            setResult(null);
-                        }}
-                    />
+
+                {/* Result Side */}
+                <div className="card-premium">
+                    <div className="card-content">
+                        <RefactorResult
+                            data={result}
+                            onApply={(newCode) => {
+                                setInputCode(newCode);
+                                setResult(null);
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </FadeIn>
