@@ -1,76 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap');
+
 :root {
-  /* Colors */
-  --bg-dark: #05050A;
-  --bg-card: #0F1016;
-  --bg-card-hover: #161822;
-  --primary: #8B5CF6;
-  /* Violet */
-  --primary-glow: rgba(139, 92, 246, 0.4);
-  --secondary: #3B82F6;
-  /* Blue */
-  --secondary-glow: rgba(59, 130, 246, 0.4);
-  --accent: #10B981;
-  /* Emerald */
-  --accent-glow: rgba(16, 185, 129, 0.4);
-  --error: #EF4444;
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --primary-glow: rgba(139, 92, 246, 0.5);
+  --secondary: #10b981;
+  --accent: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.5);
+  --bg-dark: #0f1016;
+  --bg-card: #181920;
+  --bg-card-hover: #1f212b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #2d3139;
+  --error: #ef4444;
 
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --border: #1E293B;
-
-  /* Fonts */
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-  /* Effects */
-  --glass: rgba(15, 16, 22, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --shadow-lg: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  --glow-primary: 0 0 20px var(--primary-glow);
-}
-
-* {
-  box-sizing: border-box;
+  --font-main: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 body {
   margin: 0;
-  font-family: var(--font-body);
+  padding: 0;
   background-color: var(--bg-dark);
   color: var(--text-main);
-  line-height: 1.6;
-  overflow-x: hidden;
-  min-height: 100vh;
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  /* Prevent body scroll, handle inside containers */
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading);
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-a {
-  color: var(--primary);
-  text-decoration: none;
-  transition: color 0.2s;
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
 }
 
-a:hover {
-  color: var(--secondary);
+::-webkit-scrollbar-thumb {
+  background: #333642;
+  border-radius: 4px;
 }
 
-/* Utilities */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Utilities */
+.btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-display);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-main);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text-main);
+  color: var(--text-main);
+  background: var(--bg-card-hover);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(139, 92, 246, 0.3);
 }
 
 .flex {
@@ -89,8 +139,8 @@ a:hover {
   justify-content: space-between;
 }
 
-.justify-center {
-  justify-content: center;
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .gap-4 {
@@ -101,79 +151,12 @@ a:hover {
   gap: 2rem;
 }
 
-.w-full {
-  width: 100%;
-}
-
 .h-full {
   height: 100%;
 }
 
-/* Components */
-.btn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-family: var(--font-heading);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.5);
-}
-
-.btn-secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-secondary:hover {
-  border-color: var(--text-main);
-  color: var(--text-main);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.card {
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-lg);
-  transition: border-color 0.3s;
-}
-
-.card:hover {
-  border-color: var(--primary);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+.w-full {
+  width: 100%;
 }
 
 /* Animations */
@@ -200,11 +183,11 @@ a:hover {
 }
 
 .animate-slide-up {
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUp 0.4s ease-out forwards;
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 .spinner {

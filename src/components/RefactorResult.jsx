@@ -3,6 +3,44 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-tomorrow.css';
 import DiffResult from './DiffResult';
+import { ScaleIn } from './Animations';
+
+const MetricsCard = ({ metrics }) => {
+    if (!metrics) return null;
+
+    return (
+        <ScaleIn delay={0.2} className="card" style={{ marginBottom: '1rem', background: 'var(--bg-card-hover)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
+                <div className="flex flex-col">
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Complexity</span>
+                    <div className="flex items-center justify-center gap-2">
+                        <span style={{ fontSize: '1.5rem', fontWeight: 600, color: '#F87171' }}>{metrics.complexity_before}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>→</span>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 600, color: '#34D399' }}>{metrics.complexity_after}</span>
+                    </div>
+                </div>
+                <div className="flex flex-col">
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Rating</span>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 600, color: metrics.maintainability_rating === 'A' ? '#34D399' : '#FBBF24' }}>
+                        {metrics.maintainability_rating}
+                    </span>
+                </div>
+                <div className="flex flex-col">
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Lines Saved</span>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--accent)' }}>
+                        {metrics.lines_saved}
+                    </span>
+                </div>
+                <div className="flex flex-col">
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Status</span>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--primary)' }}>
+                        🚀
+                    </span>
+                </div>
+            </div>
+        </ScaleIn>
+    )
+}
 
 const RefactorResult = ({ data, onApply }) => {
     const [viewMode, setViewMode] = useState('code'); // 'code' | 'diff'
@@ -34,7 +72,7 @@ const RefactorResult = ({ data, onApply }) => {
     })();
 
     return (
-        <div className="flex flex-col gap-4 h-full" style={{ overflowY: 'auto' }}>
+        <div className="flex flex-col gap-4 h-full" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 140px)', paddingRight: '4px' }}>
 
             {/* Code Smell Alert */}
             {data.smell_detected && (
@@ -54,6 +92,9 @@ const RefactorResult = ({ data, onApply }) => {
                     </div>
                 </div>
             )}
+
+            {/* NEW: Engineering Metrics HUD */}
+            <MetricsCard metrics={data.metrics} />
 
             {/* Explanation */}
             <div className="card animate-slide-up">
