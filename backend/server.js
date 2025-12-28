@@ -30,7 +30,12 @@ const PORT = process.env.PORT || 5000;
 // Security Middlewares
 app.use(helmet());
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174']
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'https://synapserefactor.vercel.app'
+    ],
+    credentials: true
 }));
 app.use(bodyParser.json());
 
