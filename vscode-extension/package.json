@@ -22,7 +22,7 @@
         "onCommand:synapse.refactor",
         "onCommand:synapse.refactorFile"
     ],
-    "main": "./extension.js",
+    "main": "./dist/extension.js",
     "contributes": {
         "commands": [
             {
