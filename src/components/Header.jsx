@@ -89,7 +89,8 @@ const Header = ({ onOpenSettings }) => {
           <Link to="/" style={linkStyle('/')}>Refactor</Link>
           <Link to="/history" style={linkStyle('/history')}>History</Link>
           <Link to="/patterns" style={linkStyle('/patterns')}>Patterns</Link>
-          <Link to="/docs" style={linkStyle('/docs')}>Docs</Link>`n          <Link to="/extension" style={{ ...linkStyle('/extension'), background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '0.5rem 1rem', borderRadius: '8px', fontWeight: 600 }}>VS Code Extension</Link>
+          <Link to="/docs" style={linkStyle('/docs')}>Docs</Link>
+          <Link to="/extension" style={{ ...linkStyle('/extension'), background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '0.5rem 1rem', borderRadius: '8px', fontWeight: 600 }}>VS Code Extension</Link>
         </nav>
 
         <div className="user-profile flex items-center gap-6">
