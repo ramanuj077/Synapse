@@ -89,20 +89,22 @@ const Header = ({ onOpenSettings }) => {
           <Link to="/extension" style={{ ...linkStyle('/extension'), background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '0.5rem 1rem', borderRadius: '8px', fontWeight: 600 }}>VS Code Extension</Link>
         </nav>
 
-        <div className="user-profile flex items-center gap-6">
+        <div className="user-profile flex items-center gap-4">
           <button
             onClick={toggleTheme}
             style={{
               background: 'rgba(255,255,255,0.1)',
               border: '1px solid var(--border)',
               borderRadius: '8px',
-              padding: '0.4rem',
+              padding: '0.6rem',
               color: 'var(--text-muted)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
+              minWidth: '40px',
+              minHeight: '40px'
             }}
             title={theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode"}
             onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'var(--text-main)'; }}
@@ -114,35 +116,43 @@ const Header = ({ onOpenSettings }) => {
           <button
             onClick={onOpenSettings}
             style={{
-              background: 'none',
-              border: 'none',
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+              padding: '0.6rem',
               color: 'var(--text-muted)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.5rem'
+              justifyContent: 'center',
+              transition: 'all 0.2s',
+              minWidth: '40px',
+              minHeight: '40px'
             }}
             title="Settings"
+            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'var(--text-main)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'var(--text-muted)'; }}
           >
             <Settings size={18} />
           </button>
 
           {isAuthenticated ? (
-            <div className="flex items-center gap-4">
-              <div style={{ textAlign: 'right', lineHeight: '1.2' }}>
-                <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>{user?.name || 'User'}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Pro Plan</div>
-              </div>
+            <>
               <div style={{
-                position: 'relative',
-                cursor: 'pointer'
-              }} className="group">
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                paddingRight: '1rem',
+                borderRight: '1px solid var(--border)'
+              }}>
+                <div style={{ textAlign: 'right', lineHeight: '1.2' }}>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>{user?.name || 'User'}</div>
+                </div>
                 <div style={{
                   width: '36px',
                   height: '36px',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #1f2937, #111827)',
-                  border: '2px solid var(--primary)',
+                  background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -150,27 +160,37 @@ const Header = ({ onOpenSettings }) => {
                 }}>
                   <User size={18} />
                 </div>
-
-                {/* Logout Button (Hover or Click) */}
-                <button
-                  onClick={handleLogout}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    background: 'none',
-                    border: 'none',
-                    color: '#ef4444',
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    marginLeft: '1rem'
-                  }}
-                  title="Sign Out"
-                >
-                  <LogOut size={16} />
-                </button>
               </div>
-            </div>
+
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  borderRadius: '8px',
+                  padding: '0.6rem',
+                  color: '#ef4444',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s',
+                  minWidth: '40px',
+                  minHeight: '40px'
+                }}
+                title="Sign Out"
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+                  e.currentTarget.style.borderColor = '#ef4444';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                }}
+              >
+                <LogOut size={18} />
+              </button>
+            </>
           ) : (
             <div className="flex gap-3 items-center">
               <Link to="/login" style={{

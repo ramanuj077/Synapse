@@ -154,7 +154,7 @@ function UserData({ userId }) {
                             WebkitTextFillColor: 'transparent',
                             filter: 'drop-shadow(0 0 20px rgba(99, 102, 241, 0.3))'
                         }}>
-                            Refactor Workbench
+                            Code Quality Assistant
                         </span>
                     </h2>
 
@@ -167,12 +167,12 @@ function UserData({ userId }) {
                         <ArrowRight size={12} style={{ opacity: 0.3 }} />
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                             <div style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', padding: '0.25rem', borderRadius: '4px' }}><Scan size={12} /></div>
-                            Detect Smells
+                            Analyze Quality
                         </div>
                         <ArrowRight size={12} style={{ opacity: 0.3 }} />
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                             <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '0.25rem', borderRadius: '4px' }}><Wand2 size={12} /></div>
-                            Apply Safe Fixes
+                            Apply Improvements
                         </div>
                     </div>
                 </div>
@@ -267,7 +267,7 @@ function UserData({ userId }) {
                             </>
                         ) : (
                             <>
-                                <ShieldCheck size={18} fill="currentColor" /> Analyze & Refactor
+                                <ShieldCheck size={18} fill="currentColor" /> Analyze Code Quality
                             </>
                         )}
                     </button>
@@ -392,10 +392,10 @@ function UserData({ userId }) {
                             </div>
 
                             <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-                                Ready to Optimize
+                                Get Started
                             </h3>
                             <p style={{ maxWidth: '300px', lineHeight: '1.6', color: 'var(--text-muted)', marginBottom: '2rem' }}>
-                                Synapse preserves behavior while fixing smells. <br />
+                                Transform messy code into clean, maintainable code. <br />
                                 <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>Supported: JS, TS, Python, Java</span>
                             </p>
 

@@ -23,7 +23,7 @@ const CodeHealthScore = ({ before, after }) => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
                 <CheckCircle2 size={24} color="#10b981" />
                 <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#6ee7b7' }}>
-                    Code Health Score
+                    Code Quality Score
                 </h3>
             </div>
 
@@ -70,7 +70,7 @@ const CodeHealthScore = ({ before, after }) => {
                 {/* After */}
                 <div style={{ flex: 1, textAlign: 'center' }}>
                     <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                        After Refactor
+                        After Analysis
                     </div>
                     <div style={{
                         width: '80px',
@@ -119,7 +119,7 @@ const CodeHealthScore = ({ before, after }) => {
                         +{improvement}
                     </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                        improvement
+                        Quality Gain
                     </div>
                 </div>
             </div>

@@ -4,48 +4,190 @@ import DiffResult from './DiffResult';
 import { ScaleIn } from './Animations';
 import CodeHealthScore from './CodeHealthScore';
 import FeedbackButtons from './FeedbackButtons';
+import SafetyBadges from './SafetyBadges';
+import Tooltip from './Tooltip';
+import { TrendingDown, TrendingUp, Clock, Shield, Minimize2, HelpCircle } from 'lucide-react';
 
 const MetricsCard = ({ metrics }) => {
     if (!metrics) return null;
 
+    const metricItems = [
+        {
+            icon: TrendingUp,
+            label: 'Code Quality',
+            tooltip: 'Measures code structure and complexity - lower is better',
+            before: metrics.complexity_before,
+            after: metrics.complexity_after,
+            beforeColor: '#F87171',
+            afterColor: '#34D399',
+            improved: metrics.complexity_after < metrics.complexity_before
+        },
+        {
+            icon: Clock,
+            label: 'Time Impact',
+            tooltip: 'Algorithm efficiency and execution speed improvements',
+            before: metrics.time_complexity_before || '?',
+            after: metrics.time_complexity_after || '?',
+            beforeColor: 'var(--text-muted)',
+            afterColor: 'var(--accent)',
+            showArrow: true
+        },
+        {
+            icon: Shield,
+            label: 'Stability Score',
+            tooltip: 'Probability of production issues - higher is better',
+            value: `${metrics.risk_score}%`,
+            valueColor: metrics.risk_score < 20 ? '#34D399' : '#F87171',
+            subtitle: metrics.risk_score < 20 ? 'Low Risk' : 'Monitor',
+            isStability: true
+        },
+        {
+            icon: Minimize2,
+            label: 'Lines Optimized',
+            tooltip: 'Number of code lines reduced while preserving functionality',
+            value: metrics.lines_saved,
+            valueColor: 'var(--accent)',
+            subtitle: 'lines',
+            isOptimized: true
+        }
+    ];
+
     return (
-        <ScaleIn delay={0.2} className="card" style={{ marginBottom: '1rem', background: 'var(--bg-card-hover)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
-                <div className="flex flex-col">
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Complexity</span>
-                    <div className="flex items-center justify-center gap-2">
-                        <span style={{ fontSize: '1.5rem', fontWeight: 600, color: '#F87171' }}>{metrics.complexity_before}</span>
-                        <span style={{ color: 'var(--text-muted)' }}>→</span>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 600, color: '#34D399' }}>{metrics.complexity_after}</span>
-                    </div>
-                </div>
+        <ScaleIn delay={0.2} className="card" style={{
+            marginBottom: '1.5rem',
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(16, 185, 129, 0.05))',
+            border: '1px solid rgba(99, 102, 241, 0.2)',
+            padding: '1.5rem'
+        }}>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '1.25rem'
+            }}>
+                {metricItems.map((item, index) => (
+                    <div
+                        key={index}
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.75rem',
+                            padding: '1rem',
+                            background: 'rgba(255, 255, 255, 0.02)',
+                            borderRadius: '10px',
+                            border: '1px solid var(--border)',
+                            transition: 'all 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(99, 102, 241, 0.15)';
+                            e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = 'none';
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                        }}
+                    >
+                        {/* Header with Icon and Tooltip */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <div style={{
+                                    padding: '0.4rem',
+                                    background: 'rgba(99, 102, 241, 0.1)',
+                                    borderRadius: '6px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <item.icon size={16} color="#818cf8" />
+                                </div>
+                                <span style={{
+                                    fontSize: '0.75rem',
+                                    color: 'var(--text-muted)',
+                                    textTransform: 'uppercase',
+                                    fontWeight: 600,
+                                    letterSpacing: '0.5px'
+                                }}>
+                                    {item.label}
+                                </span>
+                            </div>
+                            <Tooltip content={item.tooltip}>
+                                <HelpCircle
+                                    size={14}
+                                    color="var(--text-muted)"
+                                    style={{ cursor: 'help', opacity: 0.6 }}
+                                />
+                            </Tooltip>
+                        </div>
 
-                {/* NEW: Time Complexity & Risk */}
-                <div className="flex flex-col">
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Time Impact</span>
-                    <div className="flex items-center justify-center gap-2">
-                        <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-muted)' }}>{metrics.time_complexity_before || '?'}</span>
-                        <span style={{ color: 'var(--text-muted)' }}>→</span>
-                        <span style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--accent)' }}>{metrics.time_complexity_after || '?'}</span>
-                    </div>
-                </div>
+                        {/* Value Display */}
+                        {item.isStability || item.isOptimized ? (
+                            <div style={{ textAlign: 'center', padding: '0.5rem 0' }}>
+                                <div style={{
+                                    fontSize: '2rem',
+                                    fontWeight: 700,
+                                    color: item.valueColor,
+                                    lineHeight: 1,
+                                    marginBottom: '0.25rem'
+                                }}>
+                                    {item.value}
+                                </div>
+                                <div style={{
+                                    fontSize: '0.7rem',
+                                    color: 'var(--text-muted)',
+                                    textTransform: 'uppercase'
+                                }}>
+                                    {item.subtitle}
+                                </div>
+                            </div>
+                        ) : (
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.75rem',
+                                padding: '0.5rem 0'
+                            }}>
+                                <span style={{
+                                    fontSize: '1.5rem',
+                                    fontWeight: 600,
+                                    color: item.beforeColor
+                                }}>
+                                    {item.before}
+                                </span>
+                                <span style={{
+                                    color: 'var(--text-muted)',
+                                    fontSize: '1.2rem'
+                                }}>
+                                    →
+                                </span>
+                                <span style={{
+                                    fontSize: '1.5rem',
+                                    fontWeight: 600,
+                                    color: item.afterColor
+                                }}>
+                                    {item.after}
+                                </span>
+                            </div>
+                        )}
 
-                <div className="flex flex-col">
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Risk Score</span>
-                    <div className="flex items-center justify-center gap-1">
-                        <span style={{ fontSize: '1.5rem', fontWeight: 600, color: metrics.risk_score < 20 ? '#34D399' : '#F87171' }}>
-                            {metrics.risk_score}%
-                        </span>
-                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>prob.</span>
+                        {/* Improvement Indicator */}
+                        {item.improved && (
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.25rem',
+                                fontSize: '0.7rem',
+                                color: '#34D399',
+                                fontWeight: 600
+                            }}>
+                                <TrendingDown size={12} />
+                                <span>Improved</span>
+                            </div>
+                        )}
                     </div>
-                </div>
-
-                <div className="flex flex-col">
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Code Saved</span>
-                    <span style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--accent)' }}>
-                        {metrics.lines_saved} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>lines</span>
-                    </span>
-                </div>
+                ))}
             </div>
         </ScaleIn>
     )
@@ -63,10 +205,10 @@ const RefactorResult = ({ data, onApply }) => {
                     opacity: 0.5,
                     filter: 'drop-shadow(0 0 10px var(--primary-glow))'
                 }}>✨</div>
-                <h3 style={{ color: 'var(--text-muted)' }}>Ready to Optimize</h3>
+                <h3 style={{ color: 'var(--text-muted)' }}>Ready to Analyze</h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                    Paste your code on the left and hit Refactor.<br />
-                    Synapse will analyze and improve it.
+                    Paste your code on the left and start the analysis.<br />
+                    We'll identify improvements and show you the results.
                 </p>
             </div>
         </div>
@@ -102,7 +244,7 @@ const RefactorResult = ({ data, onApply }) => {
                                     fontWeight: 700,
                                     textTransform: 'uppercase',
                                     letterSpacing: '0.5px'
-                                }}>Code Smell Detected</h3>
+                                }}>Quality Issues Found</h3>
                                 <div style={{
                                     background: 'rgba(239, 68, 68, 0.2)',
                                     color: '#fca5a5',
@@ -126,6 +268,15 @@ const RefactorResult = ({ data, onApply }) => {
                 </div>
             )}
 
+            {/* Safety Status Badges */}
+            <SafetyBadges data={data} />
+
+            {/* Feedback Section */}
+            <FeedbackButtons
+                resultId={data.id || 'result-' + Date.now()}
+                onFeedback={(feedback) => console.log('Feedback:', feedback)}
+            />
+
             {/* Safety Gate Warning (Synapse 2.1) */}
             {data.safety_status === 'syntax_warning' && (
                 <div className="animate-fade-in" style={{
@@ -139,9 +290,9 @@ const RefactorResult = ({ data, onApply }) => {
                 }}>
                     <div style={{ color: '#F59E0B' }}>🛡️</div>
                     <div>
-                        <h4 style={{ color: '#F59E0B', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Synapse 3.0 Warning</h4>
+                        <h4 style={{ color: '#F59E0B', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Analysis Warning</h4>
                         <p style={{ margin: 0, fontSize: '0.9rem', color: '#FCD34D' }}>
-                            Self-healing failed after multiple attempts. The code may contain syntax errors.
+                            Unable to fully optimize this code. Please verify syntax and structure.
                         </p>
                     </div>
                 </div>
@@ -161,9 +312,9 @@ const RefactorResult = ({ data, onApply }) => {
                 }}>
                     <span style={{ fontSize: '1.2rem' }}>🚑</span>
                     <div>
-                        <h4 style={{ color: 'var(--secondary)', fontSize: '0.85rem', margin: 0 }}>Self-Healed Code</h4>
+                        <h4 style={{ color: 'var(--secondary)', fontSize: '0.85rem', margin: 0 }}>Auto-Corrected</h4>
                         <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                            Synapse detected and fixed a syntax error automatically during generation.
+                            Detected and fixed syntax errors automatically during analysis.
                         </p>
                     </div>
                 </div>
@@ -197,7 +348,7 @@ const RefactorResult = ({ data, onApply }) => {
                         textTransform: 'uppercase',
                         letterSpacing: '1px',
                         fontWeight: 700
-                    }}>AI Insight & Analysis</h4>
+                    }}>Analysis Summary</h4>
                 </div>
                 <p style={{
                     margin: 0,
