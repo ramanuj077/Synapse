@@ -18,7 +18,10 @@
         "javascript",
         "python"
     ],
-    "activationEvents": [],
+    "activationEvents": [
+        "onCommand:synapse.refactor",
+        "onCommand:synapse.refactorFile"
+    ],
     "main": "./extension.js",
     "contributes": {
         "commands": [
