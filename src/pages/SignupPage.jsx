@@ -39,12 +39,8 @@ const SignupPage = () => {
             alignItems: 'center',
             justifyContent: 'center',
             background: 'radial-gradient(circle at 50% 10%, #1e1b4b 0%, #000000 100%)',
-            padding: '2rem',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            zIndex: 50,
-            overflowY: 'auto'
+            padding: '2rem 1rem',
+            boxSizing: 'border-box'
         }}>
             {/* Ambient Background Effects */}
             <div style={{

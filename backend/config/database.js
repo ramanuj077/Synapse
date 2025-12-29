@@ -56,9 +56,8 @@ const testConnection = async () => {
         await sequelize.authenticate();
         console.log('✅ PostgreSQL connection established successfully.');
     } catch (error) {
-        console.error('❌ PostgreSQL Connection Error:', error.message);
-        // console.error('Full Error:', JSON.stringify(error, null, 2));
-        throw error; // Let server.js handle the fallback
+        // Silently fail - SQLite fallback is automatic
+        throw error;
     }
 };
 
