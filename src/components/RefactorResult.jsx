@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Editor } from '@monaco-editor/react';
 import DiffResult from './DiffResult';
 import { ScaleIn } from './Animations';
+import CodeHealthScore from './CodeHealthScore';
+import FeedbackButtons from './FeedbackButtons';
 
 const MetricsCard = ({ metrics }) => {
     if (!metrics) return null;
