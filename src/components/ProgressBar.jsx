@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+pimport { useEffect, useState } from 'react';
 
 const ProgressBar = ({ active = false, duration = 3000, onComplete }) => {
     const [progress, setProgress] = useState(0);
